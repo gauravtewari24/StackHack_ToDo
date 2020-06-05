@@ -1,0 +1,33 @@
+<%- include('header') %>
+  
+<div style="background-image: url('../images/img.jpg');">
+
+
+  <div class="row" style= " background-color: rgba(105,100,100,0.5); margin: 20px; padding: 20px;">
+    <div class="col-sm-6">
+      <h1>Register</h1>
+
+      <!-- <div class="card">
+        <div class="card-body"> -->
+
+          <!-- Makes POST request to /register route -->
+          <form action="/register" method="POST">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" name="password">
+            </div>
+            <button type="submit" class="btn btn-success">register</button>
+          </form>
+
+        <!-- </div>
+      </div> -->
+    </div>
+
+  </div>
+</div>
+
+<%- include('header') %>

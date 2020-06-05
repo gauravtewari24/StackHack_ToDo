@@ -1,0 +1,100 @@
+<%- include("header") -%>
+
+<!-- list starts -->
+<div style="background-image: url('../images/img.jpg'); padding: 30px;">
+
+  <div class="row">
+    <div class="col-lg-4" id="heading" >
+    <h1 style="font-size: 30px;"> <%= userName %> </h1>
+  </div>
+
+  <div class="col-lg-4" id="heading" >
+    <h1>TO DO LIST WEB-APP</h1>
+    <!-- <a class="btn btn-dark btn-lg" href="/logout" role="button">Log out</a> -->
+  </div>
+
+  <div class="col-lg-4" id="heading">
+    <% if(userName===""){%>
+      <a class="btn btn-light btn-lg" href="/register" role="button">Register</a>
+      <a class="btn btn-dark btn-lg" href="/login" role="button">Login</a>
+    <%}else{ %>
+      <a class="btn btn-dark btn-lg" href="/lg" role="button">Logout</a>
+    <% }%>
+  </div>
+  </div>
+  
+  <div class="row">
+
+    <!-- box 1st -->
+
+      <div class=" col-lg-4 innerbox">
+        <div class="box" id="heading">
+          <p>instructions to use this project and details about it.😁</p>
+        </div>
+        <div class="infobox box">
+            <p>use the center list and + button to add items.size</p>
+            <p>use the check box to delete items.</p>
+            <p>use the right side card to make a new list.</p>
+            <p>write custom route to enter list.</p>
+            <p>every detail is saved in database.</p>
+        </div>
+      </div>
+
+      <!-- box second -->
+
+      <div class=" col-lg-4 innerbox">
+        
+        <div class="box" id="heading">
+        <h1> <%= listTitle %> </h1>
+        </div>
+
+        <div class="box">
+    
+        <%  newListItems.forEach(function(item){ %>
+
+        <form action="/delete" method="post">
+          <div class="item">
+            <input type="checkbox" name="checkbox" value="<%=item._id%>" onChange="this.form.submit()">
+            <p><%=item.name%></p>
+          </div>
+          <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+        </form>
+        <%  }) %>
+
+
+        <form class="item" action="/" method="post">
+          <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+          <button type="submit" name="list" class="button" value="<%= listTitle %>">+</button>
+        </form>
+      </div>
+
+      </div>
+
+      <!-- box third -->
+
+      <div class=" col-lg-4 innerbox">
+        
+        <div class="box" id="heading">
+        <h1> Add a new list or open a old list here </h1>
+        </div>
+
+        <div class="box">
+
+        <form class="item" action="/customList" method="post">
+          <input type="text" name="newList" placeholder="New List" autocomplete="off">
+          <button type="submit" name="list" class="button" value="">+</button>
+        </form>
+
+        </div>
+
+        <div class="box" id="heading">
+        <p>add a new list by typing its name in it.</p>
+        <p>open a new list by typing its name in it.</p>
+        <p>type the correct name to open the list, if name didnot match it will create new list.</p>
+        
+        </div>
+
+      </div>
+    </div>
+</div>
+<%- include("footer") -%>
