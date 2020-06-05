@@ -1,33 +1,45 @@
 <%- include('header') %>
-  
-<div style="background-image: url('../images/img.jpg');">
 
-
-  <div class="row" style= " background-color: rgba(105,100,100,0.5); margin: 20px; padding: 20px;">
-    <div class="col-sm-6">
-      <h1>Register</h1>
-
+<div
+  style="
+    background-image: url('../images/img.jpg');
+    background-repeat: no-repeat;
+    object-fit: cover;
+  "
+>
+  <div class="row" style="padding: 40px 20px;">
+    <div class="col-lg-4 col-md-3 col-1"></div>
+    <div
+      class="col-lg-4 col-md-6 col-10"
+      style="background-color: rgba(105, 100, 100, 0.5); padding: 40px;"
+    >
+      <h1 style="padding: 0;">Register</h1>
+      <br />
       <!-- <div class="card">
         <div class="card-body"> -->
 
-          <!-- Makes POST request to /register route -->
-          <form action="/register" method="POST">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" name="username">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" name="password">
-            </div>
-            <button type="submit" class="btn btn-success">register</button>
-          </form>
+      <!-- Makes POST request to /register route -->
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" name="username" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" name="password" />
+        </div>
+        <button type="submit" class="btn btn-success">register</button>
+        <br /><br />
+        <p style="color: aliceblue; padding: 0;">
+          <b> Already have an account? <a href="/login">Log In</a></b>
+        </p>
+      </form>
 
-        <!-- </div>
+      <!-- </div>
       </div> -->
     </div>
-
+    <div class="col-lg-4 col-md-3 col-1"></div>
   </div>
 </div>
 
-<%- include('header') %>
+<%- include('footer') %>

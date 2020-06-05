@@ -47,6 +47,16 @@
         <div class="box" id="heading">
         <h1> <%= listTitle %> </h1>
         </div>
+        <!-- <form action="/customlist" method="POST">
+          <select name="newList" id="cars" style="width:80%;height: 40px;">
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Others">Others</option>
+          </select>
+          <button class="btn btn-success"type="submit" class="button" >Go</button>
+
+        </form> -->
 
         <div class="box">
     
@@ -55,17 +65,51 @@
         <form action="/delete" method="post">
           <div class="item">
             <input type="checkbox" name="checkbox" value="<%=item._id%>" onChange="this.form.submit()">
-            <p><%=item.name%></p>
+            <%if(item.category==="Personal"){%>
+              <p style="width: 120%;text-align: left;"><%=item.task%></p> 
+              <div  style="width: 100%;" >
+                <p style="font-size:0.85em"><i alt="Personal" title="Personal" class="fas fa-user-tag"></i> <%=item.date%></p>
+              </div>
+            <%}%>
+            <%if(item.category==="Shopping"){%>
+              <p style="width: 120%;text-align: left;"><%=item.task%> </p> 
+              <div  style="width: 100%;">
+                <p style="font-size:0.85em">     
+                  <i title="Shopping"class="fas fa-shopping-bag"></i>
+                    <%=item.date%></p>
+              </div>
+              
+            <%}%>
+            <%if(item.category==="Work"){%>
+              <p style="width: 120%;text-align: left;"><%=item.task%> </p>
+              <div style="width: 100%;">
+                <p style="font-size:0.85em">     
+                  <i title="Work" class="far fa-building"></i>
+                  <%=item.date%></p>
+              </div>
+             
+            <%}%>
+            <%if(item.category==="Others"){%>
+              <p style="width: 120%;text-align: left;"><%=item.task%></p> 
+              <div  style="width: 100%;">
+                <p style="font-size:0.85em"><i title="Others" class="fab fa-algolia"></i> <%=item.date%></p>
+
+              </div>
+            <%}%>
+            
+            
           </div>
           <input type="hidden" name="listName" value="<%= listTitle %>"></input>
         </form>
         <%  }) %>
+        
+        
+      
 
-
-        <form class="item" action="/" method="post">
+        <!-- <form class="item" action="/" method="post">
           <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
           <button type="submit" name="list" class="button" value="<%= listTitle %>">+</button>
-        </form>
+        </form> -->
       </div>
 
       </div>
@@ -80,20 +124,53 @@
 
         <div class="box">
 
-        <form class="item" action="/customList" method="post">
+       <!--  <form class="item" action="/customList" method="post">
           <input type="text" name="newList" placeholder="New List" autocomplete="off">
-          <button type="submit" name="list" class="button" value="">+</button>
-        </form>
+         
 
+          <button type="submit" name="list" class="button" value="">+</button>
+          
+
+        </form> -->
+        <form action="/category" method="POST" style="padding: 5px;">
+          <div class="form-group" >
+            <input 
+              class="form-control"
+              type="text"
+              name="task"
+              placeholder="Add Task"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              class="form-control"
+              type="date"
+              name="duedate"
+              placeholder="Due Date"
+            />
+          </div>
+          <div class="form-group" >
+            <select name="newList" id="cars" style="width:80%;height: 40px;">
+              <option value="Personal">Personal</option>
+              <option value="Work">Work</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Others">Others</option>
+            </select>
+            </div>
+  
+          <div class="form-group">
+            <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+          </div>
+        </form>
         </div>
 
-        <div class="box" id="heading">
+      <!--   <div class="box" id="heading">
         <p>add a new list by typing its name in it.</p>
         <p>open a new list by typing its name in it.</p>
         <p>type the correct name to open the list, if name didnot match it will create new list.</p>
         
         </div>
-
+ -->
       </div>
     </div>
 </div>
