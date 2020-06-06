@@ -38,6 +38,10 @@ app.get("/lg", function (req, res) {
 });
 
 app.get("/", function (req, res) {
+  res.render("landing", { userName: usern });
+});
+
+app.get("/category", function (req, res) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -63,29 +67,6 @@ app.get("/", function (req, res) {
   }
 });
 
-app.get("/landing", function (req, res) {
-  res.render("landing", { userName: usern });
-});
-
-/* app.get("/category", function (req, res) {
-  if (usern === "") {
-    res.redirect("/login");
-  } else {
-    Item.find({ user: usern })
-      .sort({ date: 1 })
-      .then((posts) => {
-        res.render("list", {
-          userName: usern,
-          listTitle: "All Tasks",
-          newListItems: posts,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}); */
-
 app.post("/category", function (req, res) {
   const category = req.body.newList;
   const task = req.body.task;
@@ -101,7 +82,7 @@ app.post("/category", function (req, res) {
     res.redirect("/login");
   } else {
     item.save();
-    res.redirect("/");
+    res.redirect("/category");
   }
 });
 
@@ -120,7 +101,7 @@ app.post("/register", function (req, res) {
     } else {
       usern = req.body.username;
 
-      var today = new Date();
+      /*  var today = new Date();
       var dd = String(today.getDate()).padStart(2, "0");
       var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
       var yyyy = today.getFullYear();
@@ -133,9 +114,9 @@ app.post("/register", function (req, res) {
         category: "Personal",
       });
       defaultItems.save();
-
+ */
       console.log(usern);
-      res.redirect("/");
+      res.redirect("/category");
     }
   });
 });
@@ -151,7 +132,7 @@ app.post("/login", function (req, res) {
     } else if (foundUser) {
       if (foundUser.password === password) {
         usern = foundUser.email;
-        res.redirect("/");
+        res.redirect("/category");
       } else {
         res.redirect("login");
       }
@@ -161,7 +142,7 @@ app.post("/login", function (req, res) {
   });
 });
 
-app.post("/", function (req, res) {
+/* app.post("/", function (req, res) {
   const itemName = req.body.newItem;
   const listName = req.body.list;
 
@@ -180,7 +161,7 @@ app.post("/", function (req, res) {
       res.redirect("/" + listName);
     });
   }
-});
+}); */
 
 app.post("/delete", function (req, res) {
   const checkedItemId = req.body.checkbox;
@@ -190,19 +171,11 @@ app.post("/delete", function (req, res) {
     Item.findByIdAndRemove(checkedItemId, function (err) {
       if (!err) {
         console.log("Successfully deleted checked item.");
-        res.redirect("/");
+        res.redirect("/category");
       }
     });
   } else {
-    List.findOneAndUpdate(
-      { user: usern, name: listName },
-      { $pull: { items: { _id: checkedItemId } } },
-      function (err, foundList) {
-        if (!err) {
-          res.redirect("/" + listName);
-        }
-      }
-    );
+    res.redirect("/category");
   }
 });
 
