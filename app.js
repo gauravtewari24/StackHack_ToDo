@@ -63,7 +63,6 @@ app.get("/category", function (req, res) {
     Item.find({ user: usern })
       .sort({ date: 1 })
       .then((posts) => {
-        console.log(posts[0].date);
         res.render("list", {
           userName: usern,
           listTitle: "All Tasks",
@@ -129,21 +128,6 @@ app.post("/register", function (req, res) {
       console.log(err);
     } else {
       usern = req.body.username;
-
-      /*  var today = new Date();
-      var dd = String(today.getDate()).padStart(2, "0");
-      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-      var yyyy = today.getFullYear();
-
-      today = yyyy + "-" + mm + "-" + dd;
-      const defaultItems = new Item({
-        task: "Add New Task",
-        date: today,
-        user: usern,
-        category: "Personal",
-      });
-      defaultItems.save();
- */
       console.log(usern);
       res.redirect("/category");
     }
