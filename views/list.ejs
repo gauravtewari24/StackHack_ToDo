@@ -29,26 +29,95 @@
 
       <div class=" col-lg-4 innerbox">
         <div class="box" id="heading">
-          <p>instructions to use this project and details about it.😁</p>
+          <h1>Search tasks</h1>
         </div>
         <div class="infobox box">
-            <p>use the Add Task list to add an item .</p>
-            <p>use the check box to delete items.</p>
+          <!-- new search form -->
 
-            <p>You can categorize your task into categories like personal ,shopping, work and others</p>
-            <p>every detail is saved in database.</p>
+          <form action="/Search" method="POST" style="padding: 5px;opacity: 0.9;">
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="date"
+                name="date"
+                placeholder="Due Date"
+              />
+            </div>
+            <div class="form-group" >
+              <select name="newList" id="cars" style="width:80%;height: 40px;">
+                <option value="">Choose a category</option>
+                <option value="Personal">Personal</option>
+                <option value="Work">Work</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Others">Others</option>
+              </select>
+              </div>
+    
+            <div class="form-group">
+              <button class="btn btn-lg btn-primary btn-block">Search</button>
+            </div>
+          </form>
+
         </div>
+        <h5 style="color:white;text-align: left;margin-bottom: 0;padding-bottom: 0;">Search result</h5>
+        <div class="box">
+
+        <% var i=0; newListItems.forEach(function(item){ %>
+
+          <%if(item.date===date_s || item.category===category_s ){ i=1;%>
+            
+              <div class="item">
+                <p style="width: 120%;text-align: left;font-size: 1.1em;"><%=item.task%></p>
+                <%if(item.category==="Personal"){%>
+
+                  <div  style="width: 100%;" >
+                    <p style="font-size:0.85em"><i alt="Personal" title="Personal" class="fas fa-user-tag"></i> <%=item.date%></p>
+                  </div>
+
+                <%}%>
+                <%if(item.category==="Work"){ %>
+
+                  <div style="width: 100%;">
+                    <p style="font-size:0.85em"><i title="Work" class="far fa-building"></i><%=item.date%></p>
+                  </div>
+                
+                <%}%>
+                <%if(item.category==="Shopping"){%>
+
+                  <div  style="width: 100%;">
+                    <p style="font-size:0.85em"><i title="Shopping"class="fas fa-shopping-bag"></i><%=item.date%></p>
+                  </div>
+
+                <%}%>
+                <%if(item.category==="Others"){%>
+
+                  <div  style="width: 100%;">
+                    <p style="font-size:0.85em"><i title="Others" class="fab fa-algolia"></i> <%=item.date%></p>
+                  </div>
+
+                <%}%>
+              </div>
+              <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+          <%}%>
+        <%  }) %>
+        <%if(i===0){%>
+          <div class="item">
+            <p style="width: 120%;text-align: left;font-size: 1.1em;">No Task Found</p> 
+          </div>
+        <%}%>
+        </div>
+
       </div>
 
       <!-- box second -->
 
-      <div class=" col-lg-4 innerbox">
+        <div class=" col-lg-4 innerbox">
         
         <div class="box" id="heading">
         <h1> <%= listTitle %> </h1>
         </div>
       
-        <h5 style="text-align: left;margin-bottom: 0;padding-bottom: 0;">Ongoing</h5>
+        <h5 style="color:white;text-align: left;margin-bottom: 0;padding-bottom: 0;">Ongoing</h5>
         <div class="box">
 
         <% var i=0; newListItems.forEach(function(item){ %>
@@ -90,8 +159,6 @@
     
                   </div>
                 <%}%>
-                
-                
               </div>
               <input type="hidden" name="listName" value="<%= listTitle %>"></input>
             </form>
@@ -106,8 +173,9 @@
         <%}%>
         </div>
 
+        <!-- upcomming list -->
+        <h5 style="color:white;text-align: left;padding: 0;" >Upcoming</h6>
 
-        <h5 style="text-align: left;padding: 0;" >Upcoming</h6>
         <div class="box">
           
           <% var i=0; newListItems.forEach(function(item){ %>
@@ -161,35 +229,6 @@
               <p style="width: 120%;text-align: left;font-size: 1.1em;">No Task Found</p> 
             </div>
           <%}%>
-
-
-
-
-<!--           ################################
- -->
-        
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        
-      
-
-        <!-- <form class="item" action="/" method="post">
-          <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
-          <button type="submit" name="list" class="button" value="<%= listTitle %>">+</button>
-        </form> -->
       </div>
 
       </div>
@@ -203,15 +242,6 @@
         </div>
 
         <div class="box">
-
-       <!--  <form class="item" action="/customList" method="post">
-          <input type="text" name="newList" placeholder="New List" autocomplete="off">
-         
-
-          <button type="submit" name="list" class="button" value="">+</button>
-          
-
-        </form> -->
         <form action="/category" method="POST" style="padding: 5px;opacity: 0.9;">
           <div class="form-group" >
             <input 

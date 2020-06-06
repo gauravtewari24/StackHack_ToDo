@@ -16,16 +16,17 @@ app.use(express.static("public"));
 
 mongoose.connect(
   "mongodb+srv://gaurav:gaurav@comment-yjkq4.mongodb.net/<dbname>?retryWrites=true&w=majority",
-  {
-    useNewUrlParser: true,
-  }
+  { useNewUrlParser: true }
 );
 
 // custom variables
 
 var usern = "";
+var date_search = "";
+var category_search = "";
+var went = "false";
 
-// get rout
+// get route
 
 app.get("/login", function (req, res) {
   res.render("login");
@@ -51,24 +52,35 @@ app.get("/category", function (req, res) {
   var yyyy = today.getFullYear();
 
   today = yyyy + "-" + mm + "-" + dd;
+  console.log(today);
   if (usern === "") {
     res.redirect("/login");
   } else {
+    if (went === "false") {
+      date_search = "";
+      category_search = "";
+    }
     Item.find({ user: usern })
       .sort({ date: 1 })
       .then((posts) => {
+        console.log(posts[0].date);
         res.render("list", {
           userName: usern,
           listTitle: "All Tasks",
           newListItems: posts,
           today: today,
+          date_s: date_search,
+          category_s: category_search,
         });
+        went = "false";
       })
       .catch((err) => {
         console.log(err);
       });
   }
 });
+
+// post route
 
 app.post("/category", function (req, res) {
   const category = req.body.newList;
@@ -85,6 +97,20 @@ app.post("/category", function (req, res) {
     res.redirect("/login");
   } else {
     item.save();
+    res.redirect("/category");
+  }
+});
+
+app.post("/search", function (req, res) {
+  const category = req.body.newList;
+  const date = req.body.date;
+
+  if (usern === "") {
+    res.redirect("/login");
+  } else {
+    category_search = category;
+    date_search = date;
+    went = "true";
     res.redirect("/category");
   }
 });
@@ -185,5 +211,5 @@ app.post("/delete", function (req, res) {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, function () {
-  console.log("Yelpcamp server has started");
+  console.log("server started at 3000 port");
 });

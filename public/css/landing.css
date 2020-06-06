@@ -9,7 +9,7 @@ body {
 }
 
 #landing-header h1 {
-  color: rgb(20, 20, 20);
+  color: rgba(0, 58, 167, 0.8);
   font-family: "Patua One", cursive;
   font-size: 3em;
 }
@@ -37,27 +37,27 @@ body {
   background-repeat: no-repeat;
   opacity: 0;
   z-index: 0;
-  animation: imageAnimation 50s linear infinite;
+  animation: imageAnimation 25s linear infinite;
 }
 
 .slideshow li:nth-child(1) {
-  background-image: url("https://images.pexels.com/photos/4238524/pexels-photo-4238524.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  background-image: url(https://images.pexels.com/photos/2736499/pexels-photo-2736499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
 }
 .slideshow li:nth-child(2) {
-  background-image: url(https://images.pexels.com/photos/2736499/pexels-photo-2736499.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
-  animation-delay: 10s;
+  background-image: url(https://images.pexels.com/photos/4238524/pexels-photo-4238524.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
+  animation-delay: 5s;
 }
 .slideshow li:nth-child(3) {
   background-image: url(https://images.pexels.com/photos/131979/pexels-photo-131979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
-  animation-delay: 20s;
+  animation-delay: 10s;
 }
 .slideshow li:nth-child(4) {
   background-image: url(https://images.pexels.com/photos/416322/pexels-photo-416322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
-  animation-delay: 30s;
+  animation-delay: 15s;
 }
 .slideshow li:nth-child(5) {
-  background-image: url(https://media.istockphoto.com/photos/checklist-picture-id1168750663);
-  animation-delay: 40s;
+  background-image: url(https://images2.minutemediacdn.com/image/upload/c_crop,h_2164,w_3845,x_0,y_259/f_auto,q_auto,w_1100/v1554918405/shape/mentalfloss/94735-istock-863607936.jpg);
+  animation-delay: 20s;
 }
 
 @keyframes imageAnimation {
