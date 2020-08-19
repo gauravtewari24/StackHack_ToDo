@@ -1,9 +1,12 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const User = require("./models/users.js");
-const Item = require("./models/item.js");
-const List = require("./models/list.js");
+var express = require("express"),
+    bodyParser = require("body-parser"),
+    mongoose = require("mongoose"),
+    User = require("./models/users.js"),
+    Item = require("./models/item.js"),
+    List = require("./models/list.js"),
+    passport=require("passport"),
+    LocalStrategy=require("passport-local");
+    //User = require("./models/user.js");
 
 const _ = require("lodash");
 
@@ -19,9 +22,28 @@ mongoose.connect(
   { useNewUrlParser: true }
 );
 
+app.use(require("express-session")({
+  secret: "Once again the monsoon arrives!",
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req,res,next){
+  res.locals.currentUser=req.user;
+  //res.locals.error= req.flash("error");
+  //res.locals.success=req.flash("success");
+  next();
+})
+
+
 // custom variables
 
-var usern = "";
+//var usern = "gaurav";
 var date_search = "";
 var category_search = "";
 var went = "false";
@@ -36,16 +58,16 @@ app.get("/register", function (req, res) {
   res.render("register");
 });
 app.get("/lg", function (req, res) {
-  usern = "";
-  console.log("logout");
+  req.logout();
+  //console.log("logout");
   res.redirect("/");
 });
 
 app.get("/", function (req, res) {
-  res.render("landing", { userName: usern });
+  res.render("landing");
 });
 
-app.get("/category", function (req, res) {
+app.get("/category",isLoggedIn, function (req, res) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -53,18 +75,16 @@ app.get("/category", function (req, res) {
 
   today = yyyy + "-" + mm + "-" + dd;
   console.log(today);
-  if (usern === "") {
-    res.redirect("/login");
-  } else {
+  
     if (went === "false") {
       date_search = "";
       category_search = "";
     }
-    Item.find({ user: usern })
+    Item.find({ user: req.user.username })
       .sort({ date: 1 })
       .then((posts) => {
         res.render("list", {
-          userName: usern,
+          
           listTitle: "All Tasks",
           newListItems: posts,
           today: today,
@@ -76,12 +96,12 @@ app.get("/category", function (req, res) {
       .catch((err) => {
         console.log(err);
       });
-  }
+  //}
 });
 
 // post route
 
-app.post("/category", function (req, res) {
+app.post("/category",isLoggedIn, function (req, res) {
   const category = req.body.newList;
   const task = req.body.task;
   const date = req.body.duedate;
@@ -89,92 +109,53 @@ app.post("/category", function (req, res) {
   const item = new Item({
     task: task,
     date: date,
-    user: usern,
+    user: req.user.username,
     category: category,
   });
-  if (usern === "") {
-    res.redirect("/login");
-  } else {
+  
     item.save();
     res.redirect("/category");
-  }
+  
 });
 
-app.post("/search", function (req, res) {
+app.post("/search",isLoggedIn, function (req, res) {
   const category = req.body.newList;
   const date = req.body.date;
 
-  if (usern === "") {
-    res.redirect("/login");
-  } else {
     category_search = category;
     date_search = date;
     went = "true";
     res.redirect("/category");
-  }
 });
 
 app.post("/register", function (req, res) {
-  const email = req.body.username;
-  const password = req.body.password;
-
-  const newUser = new User({
-    email: email,
-    password: password,
-  });
-
-  newUser.save(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      usern = req.body.username;
-      console.log(usern);
-      res.redirect("/category");
-    }
-  });
-});
-
-app.post("/login", function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  User.findOne({ email: username }, function (err, foundUser) {
-    if (err) {
-      console.log(err);
-      res.redirect("/register");
-    } else if (foundUser) {
-      if (foundUser.password === password) {
-        usern = foundUser.email;
-        res.redirect("/category");
-      } else {
-        res.redirect("login");
+  var newUser = new User({username: req.body.username});
+  //const email = req.body.username;
+  User.register(newUser, req.body.password, function(err, user){
+    if(err){
+        //req.flash("error", err.message);
+        console.log(err);
+        return res.redirect("/register");
       }
-    } else {
-      res.redirect("/register");
-    }
-  });
+    passport.authenticate("local")(req, res, function(){
+     
+        //req.flash("success", "Welcome to YelpCamp " + user.username);
+        res.redirect("/category");
+    });
+});
+  
 });
 
-/* app.post("/", function (req, res) {
-  const itemName = req.body.newItem;
-  const listName = req.body.list;
+app.post("/login", passport.authenticate("local",
+{
+    successRedirect:"/category",
+    failureRedirect:"/login"
+        }),function (req, res) {
+  const usern = req.body.username;
+  
+});
 
-  const item = new Item({
-    name: itemName,
-  });
 
-  if (listName === "Today") {
-    if (usern === "") {
-      res.redirect("/login");
-    }
-  } else {
-    List.findOne({ user: usern, name: listName }, function (err, foundList) {
-      foundList.items.push(item);
-      foundList.save();
-      res.redirect("/" + listName);
-    });
-  }
-}); */
 
 app.post("/delete", function (req, res) {
   const checkedItemId = req.body.checkbox;
@@ -191,6 +172,16 @@ app.post("/delete", function (req, res) {
     res.redirect("/category");
   }
 });
+
+
+function isLoggedIn(req,res,next){
+  if(req.isAuthenticated()){
+    return next();
+  }
+  //req.flash("error","You need to be Logged In!")
+  res.redirect("/login");
+}
+
 
 const PORT = process.env.PORT || 3000;
 
